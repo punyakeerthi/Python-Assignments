@@ -1,0 +1,124 @@
+'''
+Created on Dec 22, 2023
+
+@author: PBL
+'''
+import os
+import PyPDF2
+import sys
+import json
+import re
+import configparser
+import mysql.connector
+
+def read_config(config_path):
+    config = configparser.ConfigParser()
+    config.read(config_path)
+
+    if 'DEFAULT' not in config or 'q_regex' not in config['DEFAULT']:
+        raise ValueError("Configuration file does not contain the 'regex' key.")
+
+    return config
+
+def connect_to_database():
+    try:
+        # Update with your MySQL database credentials
+        connection = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="Punya@1991",
+            database="demo"
+        )
+        return connection
+    except mysql.connector.Error as err:
+        print(f"Error connecting to the database: {err}")
+        sys.exit(1)
+
+def create_question_table(connection):
+    try:
+        cursor = connection.cursor()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS questions (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                subject_name VARCHAR(255),
+                question_text TEXT,
+                answer_options TEXT,
+                chapter_name VARCHAR(255)
+            )
+        """)
+        connection.commit()
+    except mysql.connector.Error as err:
+        print(f"Error creating table: {err}")
+        sys.exit(1)
+    finally:
+        cursor.close()
+
+def insert_question_into_database(connection, subject_name, question_text, answer_options, chapter_name):
+    try:
+        cursor = connection.cursor()
+        cursor.execute("""
+            INSERT INTO questions (subject_name, question_text, answer_options, chapter_name)
+            VALUES (%s, %s, %s, %s)
+        """, (subject_name, question_text, answer_options, chapter_name))
+        connection.commit()
+    except mysql.connector.Error as err:
+        print(f"Error inserting question into database: {err}")
+
+def read_pdf_and_store_in_database(pdf_path, page_number, config_path):
+    try:
+        configdata=read_config(config_path)
+        q_regex=configdata.get('DEFAULT', 'q_regex')
+
+        with open(pdf_path, 'rb') as pdf_file:
+            pdf_reader = PyPDF2.PdfReader(pdf_file)
+
+            if pdf_reader.is_encrypted:
+                raise Exception("The PDF file is encrypted and cannot be processed.")
+
+            text_content = ''
+            print(len(pdf_reader.pages))
+            for page_num in range(len(pdf_reader.pages)):
+                page = pdf_reader.pages[page_num]
+                text_content += page.extract_text()
+
+
+            q_pattern = re.compile(q_regex)
+            q_matches = q_pattern.findall(text_content)
+
+            if not q_matches:
+                raise ValueError("No match found for the specified regular expression.")
+
+            connection = connect_to_database()
+            create_question_table(connection)
+
+            for match in q_matches:
+                print(match)
+                subject_name="JAVA"
+                question_text=match
+                answer_options="N/A"
+                chapter_name = "SB"
+                insert_question_into_database(connection, subject_name, question_text, answer_options, chapter_name)
+
+            print(f"Successfully read page {page_number} of the PDF file and stored questions in the database.")
+
+    except FileNotFoundError as e:
+        print(f"Error: {e}")
+    except ValueError as e:
+        print(f"Error: {e}")
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        if 'connection' in locals() and connection.is_connected():
+            connection.close()
+
+if __name__ == "__main__":
+    pdf_path = 'D:/Data/SBM_01.pdf'
+    config_path = 'D:/Data/application-q.properties'
+
+    try:
+        page_number = int(input("Enter the page number to read: "))
+    except ValueError:
+        print("Invalid input. Please enter a valid page number.")
+        sys.exit(1)
+
+    read_pdf_and_store_in_database(pdf_path, page_number, config_path)

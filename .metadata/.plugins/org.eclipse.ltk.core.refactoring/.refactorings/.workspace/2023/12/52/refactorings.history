@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Delete resource &apos;Phython-Assignment/python-proj-assignments&apos;" deleteContents="false" description="Delete resource &apos;Phython-Assignment/python-proj-assignments&apos;" element1="/Phython-Assignment/python-proj-assignments" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1703760638759"/>&#x0A;<refactoring comment="Delete resource &apos;Phython-Assignment/py-ass-proj&apos;" deleteContents="false" description="Delete resource &apos;Phython-Assignment/py-ass-proj&apos;" element1="/Phython-Assignment/py-ass-proj" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1703760717803"/>
+</session>

@@ -1,0 +1,19 @@
+'''
+Created on Dec 26, 2023
+
+@author: PBL
+'''
+
+import re
+import json
+
+json_data = '{"regex": "\\b\\d+\\..*?\\?"}'
+data = json.loads(json_data)
+
+pattern = re.compile(data["regex"])
+
+text = "1. This is some text to capture?"
+matches = pattern.findall(text)
+
+print(matches)
+

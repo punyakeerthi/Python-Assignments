@@ -1,0 +1,50 @@
+'''
+Created on Dec 22, 2023
+
+@author: PBL
+'''
+import feedparser
+import requests
+from concurrent.futures import ThreadPoolExecutor
+from urllib.parse import urlparse
+
+def fetch_content(link):
+    try:
+        response = requests.get(link)
+        response.raise_for_status()  # Raise an HTTPError for bad responses
+        return response.text
+    except requests.exceptions.RequestException as e:
+        return f"Error fetching content from {link}: {e}"
+
+def process_rss(xml_url, output_file="output.txt", num_threads=5):
+    try:
+        # Parse the RSS feed
+        feed = feedparser.parse(xml_url)
+
+        # Check if the feed is not empty
+        if not feed.entries:
+            print("No entries found in the RSS feed.")
+            return
+
+        # Extract links from the feed
+        links = [entry.link for entry in feed.entries]
+
+        # Execute reading from multiple links in parallel
+        with ThreadPoolExecutor(max_workers=num_threads) as executor:
+            results = list(executor.map(fetch_content, links))
+
+        # Write the content to the output file
+        with open(output_file, "w", encoding="utf-8") as output:
+            for link, result in zip(links, results):
+                output.write(f"Link: {link}\n")
+                output.write(f"Content:\n{result}\n")
+                output.write("=" * 50 + "\n")
+
+        print(f"Content extracted from {len(links)} links. Check '{output_file}' for details.")
+
+    except Exception as e:
+        print(f"Error processing RSS feed: {e}")
+
+# Example usage
+rss_url = "https://www.w3schools.com/xml/note.xml"  # Replace with your RSS feed URL
+process_rss(rss_url)

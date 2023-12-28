@@ -1,0 +1,56 @@
+'''
+Created on Dec 22, 2023
+
+@author: PBL
+'''
+import feedparser
+import concurrent.futures
+import os
+
+def extract_content(link):
+    try:
+        feed = feedparser.parse(link)
+        print("feed: "+feed)
+        entries = feed.entries
+        print("entries: "+entries)
+
+        with open("D:/Data/rss_output.txt", "a", encoding="utf-8") as output_file:
+            for entry in entries:
+                print("entry: "+entry)
+                content = entry.get("summary", entry.get("description", ""))
+                output_file.write(f"Link: {link}\nTitle: {entry.title}\nContent: {content}\n\n")
+
+    except Exception as e:
+        print(f"Error extracting content from {link}: {str(e)}")
+
+def process_rss_file(xml_file):
+    try:
+        with open(xml_file, "r", encoding="utf-8") as file:
+            rss_content = file.read()
+             
+    except FileNotFoundError:
+        print(f"Error: RSS XML file '{xml_file}' not found.")
+        return
+    except Exception as e:
+        print(f"Error reading RSS XML file: {str(e)}")
+        return
+
+    if not rss_content:
+        print(f"Error: RSS XML file '{xml_file}' is empty.")
+        return
+
+    feeds = feedparser.parse(rss_content)
+   
+    links = [entry.link for entry in feeds.entries]
+  
+
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        executor.map(extract_content, links)
+
+if __name__ == "__main__":
+    rss_xml_file = "D:/Data/rss_data.xml"  # Replace with the path to your RSS XML file
+
+    if os.path.isfile(rss_xml_file):
+        process_rss_file(rss_xml_file)
+    else:
+        print(f"Error: RSS XML file '{rss_xml_file}' not found.")

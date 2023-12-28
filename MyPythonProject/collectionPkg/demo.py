@@ -1,0 +1,12 @@
+'''
+Created on Dec 23, 2023
+
+@author: PBL
+'''
+from collections import Counter
+
+print(Counter('aaa'))
+
+import os
+
+print(os.listdir(os.getcwd()))

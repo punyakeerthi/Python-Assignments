@@ -1,0 +1,11 @@
+'''
+Created on Dec 21, 2023
+
+@author: PBL
+'''
+
+class Account:
+     owner=''
+     balance=0
+
+        

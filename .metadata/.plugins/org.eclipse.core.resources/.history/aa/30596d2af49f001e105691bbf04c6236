@@ -1,0 +1,19 @@
+'''
+Created on Dec 21, 2023
+
+@author: PBL
+'''
+from mimetypes import init
+
+class Account:
+    owner=''
+    balance=0
+    
+    def __init__(self,owner,balance):
+        self.owner=owner
+        self.balance=balance
+        print("Account owner: "+owner)
+        print("Account balance: "+balance)
+
+
+        

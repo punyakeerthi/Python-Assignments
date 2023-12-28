@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pydev-testrun version="1.0"?><pydev-testsuite>
+    <summary errors="1" failures="0" finished="false" name="Test Run: 0" tests="0" total_time="null"/>
+    <test location="D:/PunyaPersonal/Spring STS/STS WorkSpaces/Workspace-python-19-12-2023/MyPythonProject/class_object/classAssignment.py" status="error" test="class_object.classAssignment" time="0">
+        <stdout/>
+        <stderr><![CDATA[Traceback (most recent call last):
+  File "D:\PunyaPersonal\Spring STS\STS\contents\sts-4.14.0.RELEASE\plugins\org.python.pydev.core_11.0.3.202310301107\pysrc\_pydev_runfiles\pydev_runfiles.py", line 460, in __get_module_from_str
+    mod = __import__(modname)
+          ^^^^^^^^^^^^^^^^^^^
+  File "D:\PunyaPersonal\Spring STS\STS WorkSpaces\Workspace-python-19-12-2023\MyPythonProject\class_object\classAssignment.py", line 29
+    acct1 = Account('Jose',100)
+IndentationError: expected an indented block after 'if' statement on line 23
+ERROR: Module: class_object.classAssignment could not be imported (file: D:/PunyaPersonal/Spring STS/STS WorkSpaces/Workspace-python-19-12-2023/MyPythonProject/class_object/classAssignment.py).
+]]></stderr>
+    </test>
+    <launch mode="run">
+        <launch_memento><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration local="true" path="MyPythonProject MyPythonProject"/>
+]]></launch_memento>
+    </launch>
+</pydev-testsuite>

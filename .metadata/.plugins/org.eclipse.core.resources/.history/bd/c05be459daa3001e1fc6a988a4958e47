@@ -1,0 +1,16 @@
+'''
+Created on Dec 26, 2023
+
+@author: PBL
+'''
+
+import re
+
+text = "1. This is some text to capture between. Is this the end? 2. Another text to capture. What about this? 3. More text here. And here comes the question?"
+
+pattern = re.compile(r'\b(\d+\..*?)\')
+
+matches = pattern.findall(text)
+
+print(matches)
+

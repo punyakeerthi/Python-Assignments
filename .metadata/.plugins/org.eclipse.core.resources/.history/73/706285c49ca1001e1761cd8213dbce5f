@@ -1,0 +1,8 @@
+def myfunc(input_str):
+    result_str = ""
+    for i in range(len(input_str)):
+        if i % 2 == 0:
+            result_str += input_str[i].upper()
+            else:
+            result_str += input_str[i].lower()
+    return result_str

@@ -1,0 +1,10 @@
+'''
+Created on Dec 23, 2023
+
+@author: PBL
+'''
+ 
+
+letters='aaabbbcccdddeeeeeeffffgggghhh'
+c=Counter(letters)
+print(c)
